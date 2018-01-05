@@ -1,4 +1,21 @@
 <?xml version="1.0" ?>
+<!--
+     Stylesheet to transform the electiondistricts from the swedish
+     election from 2014 to a colon separated representation.
+     This transforms the files that defines the electiondistricts
+     called vallokal.xml
+     The used nodes and their representation is
+     LÄN
+     L:länkod:lännamn
+     KOMMUN
+     K:länkod+kommunkod:länkod:kommunkod
+     VALDISTRIKT
+     V:länkod+kommunkod+valdistriktkod:länkod:kommunkod:valdistriktkod:valdistriktnamn
+
+     I have preferred to keep this file readable and having
+     unneccessary whitespace in the output
+-->
+
 <xsl:stylesheet version="1.0" xmlns:xsl="http://www.w3.org/1999/XSL/Transform">
 
   <xsl:template match="LÄN">

@@ -12,9 +12,6 @@ class slutresultat(object):
         resultXslt = "slutresultat.xslt"
 
         resultPath = Path('data/slutresultat')
-        #riksFiles = resultPath.glob('slutresultat_????R.xml')
-        #lanFiles = resultPath.glob('slutresultat_????L.xml')
-        #kommunFiles = resultPath.glob('slutresultat_????K.xml')
         files = resultPath.glob('slutresultat_????' + type + '.xml')
 
         rXslt = etree.parse(resultXslt)
@@ -30,26 +27,37 @@ class slutresultat(object):
             #print('-------------')
 
             self.resultdb = self.parse_result(rTrans, self.resultdb)
+
         #self.pp.pprint(self.resultdb)
 
         #print('-------------')
-        #pp.pprint(resultdb)
 
     def parse_result(self, r, result):
+        #print("parse_result")
         with io.StringIO(r, newline='') as rf:
             reader = csv.reader(rf, delimiter=':', skipinitialspace=True)
             for row in reader:
+                #print(row)
                 if len(row) < 4:
                     pass
                 elif row[0] == 'K':
                     result[row[1]] = { 
-                            'type': 'K', 
-                            'id': row[1],
-                            'name': row[2], 
-                            'votes': row[3] 
-                            }
+                        'type': 'K', 
+                        'id': row[1],
+                        'name': row[2], 
+                        'votes': row[3],
+                        'pct': '-'
+                        }
+                elif row[0] == 'KR':
+                    result[row[1]][row[2]] = { 
+                        'type': 'KR', 
+                        'id': row[1],
+                        'party': row[2], 
+                        'votes': row[3], 
+                        'pct': row[4] 
+                        }
                 elif row[0] == 'V':
-                    result[row[1]]['lokal'] = { 
+                    result[row[1]]['vallokal'] = { 
                             'type': 'V', 
                             'id': row[1],
                             'name': row[2], 
@@ -78,9 +86,11 @@ class slutresultat(object):
         votes = []
         for code in codes:
             if party == None:
-                votes.append(self.resultdb[code])
+                v = self.resultdb[code]
             else:
-                votes.append(self.resultdb[code][party])
+                v = self.resultdb[code][party]
+            if v != {}:  # NestedDict gives an empty dict if the key is not found
+                votes.append(v)
 
         #self.pp.pprint(votes)
         return votes
@@ -95,10 +105,10 @@ class slutresultat(object):
         try:
             return vote['votes']
         except:
-            return None
+            return '-'
 
     def get_pct(self, vote):
         try:
             return vote['pct']
         except:
-            return None
+            return '-'

@@ -8,6 +8,8 @@
      The used nodes and their representation is
      VAL/KOMMUN
      K:kommunkod:kommunnamn:antal röster i kommunen
+     GILTIGA|ÖVRIGA_GILTIGA/GILTIGA
+     KR:kommunkod:parti:totalt antal röster i kommunen:röster i procent
      KRETS_KOMMUN/VALDISTRIKT
      V:valdistriktkod:valdistriktnamn:antal röster i distriktet
      GILTIGA|ÖVRIGA_GILTIGA/GILTIGA
@@ -20,11 +22,21 @@
 <xsl:stylesheet version="1.0" xmlns:xsl="http://www.w3.org/1999/XSL/Transform">
 
   <xsl:template match="VAL/KOMMUN">
+    <xsl:variable name="kkod"><xsl:value-of select="@KOD"/></xsl:variable>
     <xsl:text>K:</xsl:text>
     <xsl:value-of select="@KOD"/><xsl:text>:</xsl:text>
     <xsl:value-of select="@NAMN"/><xsl:text>:</xsl:text>
     <xsl:value-of select="@RÖSTER"/><xsl:text>
     </xsl:text>
+
+    <xsl:for-each select="GILTIGA|ÖVRIGA_GILTIGA/GILTIGA">
+      <xsl:text>KR:</xsl:text>
+      <xsl:copy-of select="$kkod"/><xsl:text>:</xsl:text>
+      <xsl:value-of select="@PARTI"/><xsl:text>:</xsl:text>
+      <xsl:value-of select="@RÖSTER"/><xsl:text>:</xsl:text>
+      <xsl:value-of select="@PROCENT"/><xsl:text>
+      </xsl:text>
+    </xsl:for-each>
 
     <xsl:for-each select="KRETS_KOMMUN/VALDISTRIKT">
       <xsl:text>V:</xsl:text>

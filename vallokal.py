@@ -175,5 +175,5 @@ class vallokal(object):
         try:
             return self.vallokaldb[id]['name']
         except:
-            return None
+            return '-'
 

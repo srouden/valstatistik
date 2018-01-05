@@ -2,6 +2,7 @@
 
 import argparse
 import sys
+from tabulate import tabulate
 
 import vallokal
 import slutresultat
@@ -22,6 +23,13 @@ def getargs():
             help='L, K, V för att visa statistik från Län, Kommun eller Valdistrikt')
     argparser.add_argument('-p', metavar='Parti', type=str, \
             help='Lista röster för parti')
+    argparser.add_argument('-o', metavar='format', choices=['csv', 'plain', \
+        'simple', 'grid', 'fancy_grid', 'pipe', 'orgtbl', 'jira', 'presto', \
+        'psql', 'rst', 'mediawiki', 'moinmoin', 'youtrack', 'html', 'latex', \
+        'latex_raw', 'latex_booktabs', 'textile'], default='csv', type=str, \
+        help='Utskriftsformat [csv, plain, simple, grid, fancy_grid, \
+        pipe, orgtbl, jira, presto, psql, rst, mediawiki, moinmoin, \
+        youtrack, html, latex, latex_raw, latex_booktabs, textile]')
     #argparser.add_argument('-l', help='Lista kända objekt')
 
     args = argparser.parse_args()
@@ -51,10 +59,7 @@ def getvotes(codes, stats, party):
 def getstats(info, stats, args):
     codes = getcodes(info, args)
     votes = getvotes(codes, stats, args.p)
-    return votes
-
-def printstats(info, stats, votes):
-    #print(info, stats, votes)
+    result = []
     for vote in votes:
         if vote != {}:
             id = stats.get_id(vote)
@@ -62,19 +67,34 @@ def printstats(info, stats, votes):
             numVotes = stats.get_votes(vote)
             pctVotes = stats.get_pct(vote)
 
-            print("{0}\t\t{1}\t{2}".format(name, numVotes, pctVotes))
+            result.append([name, numVotes, pctVotes])
 
+    return result
 
+def printcsv(votes, how, args):
+    for v in votes:
+        print(':'.join(v))
+
+def printtab(votes, how, args):
+    if args.s == 'K':
+        region = 'Kommun'
+    elif args.s == 'V':
+        region = 'Valdistrikt'
+
+    headers = [region, "Röster", "Procent"]
+
+    print(tabulate(votes, headers=headers, tablefmt=how))
 
 def main():
     args = getargs()
     #print(args)
     info = vallokal.vallokal()
     stats = slutresultat.slutresultat(args.t)
-    #print(info, stats)
-    #sys.exit(0)
     votes = getstats(info, stats, args)
-    printstats(info, stats, votes)
+    if args.o == 'csv':
+        printcsv(votes, args.o, args)
+    else:
+        printtab(votes, args.o, args)
 
 if __name__ == '__main__':
     main()
