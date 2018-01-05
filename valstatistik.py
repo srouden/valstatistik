@@ -8,7 +8,8 @@ import vallokal
 import slutresultat
 
 def getargs():
-    argparser = argparse.ArgumentParser('Statistik om valresultatet 2014')
+    argparser = argparse.ArgumentParser(description='Statistik om valresultatet 2014')
+
     argparser.add_argument('-t', metavar='Val', choices=['R', 'L', 'K'], \
             type=str, required=True, \
             help='R, L, K för att visa statistik från valet ' + \
