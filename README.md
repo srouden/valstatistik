@@ -48,6 +48,20 @@ needed files are slutresultat.zip och vallokal.xml. They are presumed to be
 found in a subdirectory called data with the files from slutresultat.zip in
 data/slutresultat
 
+### Standard modules
+
+* io
+* csv
+* pathlib 
+* lxml 
+* itertools 
+* argparse
+* sys
+
+### External modules
+
+* tabulate (https://pypi.python.org/pypi/tabulate)
+
 ## Overall code structure
 
 The idea is to keep this as reusable as possible so the official xml-files is
