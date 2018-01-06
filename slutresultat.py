@@ -85,12 +85,15 @@ class slutresultat(object):
     def getvotes(self, codes, party=None):
         votes = []
         for code in codes:
-            if party == None:
-                v = self.resultdb[code]
-            else:
-                v = self.resultdb[code][party]
-            if v != {}:  # NestedDict gives an empty dict if the key is not found
-                votes.append(v)
+            try:
+                if party == None:
+                    v = self.resultdb[code]
+                else:
+                    v = self.resultdb[code][party]
+                if v != {}:  # NestedDict gives an empty dict if the key is not found
+                    votes.append(v)
+            except:
+                pass
 
         #self.pp.pprint(votes)
         return votes
