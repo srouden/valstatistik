@@ -4,6 +4,7 @@ This is a statistic print thingy for the swedish election result 2014. It can se
 
 ## Code Example
 
+```
 usage: valstatistik.py [-h] -t Val [-l Län] [-k Kommun] [-v Valdistrikt]
                        [-s {L,K,V}] [-p Parti] [-o format]
 
@@ -22,11 +23,14 @@ optional arguments:
   -o format       Utskriftsformat [csv, plain, simple, grid, fancy_grid, pipe,
                   orgtbl, jira, presto, psql, rst, mediawiki, moinmoin,
                   youtrack, html, latex, latex_raw, latex_booktabs, textile]
+```
 
 * The statistics for the parlament election in all municipialities in all counties that match uppsala for the party PP represented in a colon separated list:
+
   valstatistik -t R -l Uppsala -s K -p PP -o csv
 
 * The statistics for the municipiality election for all electiondistricts in Göteborg for the party S represented in mediawiki format: 
+
   valstatistik -t K -k Göteborgs -s V -p S -o mediawiki
 
 The output formats, except csv, are from the python module tabulate.
